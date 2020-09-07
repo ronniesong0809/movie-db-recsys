@@ -2,6 +2,7 @@ import requests
 from dotenv import load_dotenv
 import os
 import json
+import csv
 
 load_dotenv()
 
@@ -21,3 +22,14 @@ for d in response['results']:
 
 with open('data/data.json', 'w') as f:
     json.dump(res, f, indent=4)
+
+
+data = []
+with open('data/data.json') as f:
+    data = json.loads(f.read())
+    f = csv.writer(open('data/data.csv', 'w', newline='', encoding='utf-8'))
+
+f.writerow(['id', 'name', 'description'])
+
+for x in data:
+    f.writerow([x['id'], x['name'], x['description']])
