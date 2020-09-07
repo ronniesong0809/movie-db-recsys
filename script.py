@@ -1,6 +1,7 @@
 import requests
 from dotenv import load_dotenv
 import os
+import json
 
 load_dotenv()
 
@@ -18,4 +19,5 @@ for d in response['results']:
     x['description'] = d['overview']
     res.append(x)
 
-print(res)
+with open('data/data.json', 'w') as f:
+    json.dump(res, f, indent=4)
