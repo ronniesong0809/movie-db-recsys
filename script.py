@@ -17,6 +17,7 @@ for d in response['results']:
     x = {}
     x['id'] = d['id']
     x['name'] = d['title']
+    x['date'] = d['release_date']
     x['description'] = d['overview']
     res.append(x)
 
@@ -29,7 +30,7 @@ with open('data/data.json') as f:
     data = json.loads(f.read())
     f = csv.writer(open('data/data.csv', 'w', newline='', encoding='utf-8'))
 
-f.writerow(['id', 'name', 'description'])
+f.writerow(['id', 'name', 'date', 'description'])
 
 for x in data:
-    f.writerow([x['id'], x['name'], x['description']])
+    f.writerow([x['id'], x['name'], x['date'], x['description']])
