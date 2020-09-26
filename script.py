@@ -17,9 +17,21 @@ for i in range(1, 7, 1):
     for d in response['results']:
         x = {}
         x['id'] = d['id']
-        x['name'] = d['title']
+        
+        if 'title' in d:
+            x['name'] = d['title']
+        elif 'original_title' in d:
+            x['name'] = d['original_title']
+        else:
+            x['name'] = d['name']
+
         x['date'] = d['release_date']
-        x['description'] = d['overview']
+        
+        if d['overview'] != "":
+            x['description'] = d['overview'].replace("\r", " ")
+        else:
+            x['description'] = "null"
+
         res.append(x)
 
 with open('data/data.json', 'w') as f:
