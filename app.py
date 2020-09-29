@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import pickle
+import os
 
 app = Flask(__name__)
 
@@ -8,19 +9,21 @@ def load_pkl(name):
         return pickle.load(f)
 
 def recommender(model, id, num = 5):
-    json = list()
+    python_list = list()
     recs = model[id][:num]
     for rec in recs:
-        row = {
-            'id' : str(rec[1]),
-            'score' : str(rec[0])
-        }
-        json.append(row)
-    return json
+        row = {}
+        row['_id'] = str(rec[1])
+        row['score'] = str(rec[0])
+        row['link'] = '{}/movie/{}'.format(os.environ.get('MOVIEDB_URL'), rec[1])
+        row['recommendations'] = '{}/movie?id={}&num={}'.format(os.environ.get('MOVIE_RECSYS_URL'), rec[1], num)
+        python_list.append(row)
+    return python_list
 
 @app.route("/")
-def hello_world():
-    return "hello world"
+def home():
+    return "<a href='/movie?id=155&num=5'> example 1 </a> </br> \
+            <a href='/movie?id=120&num=10'> example 2 </a> </br>"
 
 @app.route("/movie", methods=['GET'])
 def getMovie():
@@ -30,3 +33,6 @@ def getMovie():
     model = load_pkl('models/model.pkl')
     data = recommender(model, int(id), int(num))
     return jsonify(data)
+
+if __name__ == '__main__':
+    app.run(debug=True)
