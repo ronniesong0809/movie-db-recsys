@@ -1,3 +1,4 @@
+from logging import log
 import requests
 from dotenv import load_dotenv
 import os
@@ -15,7 +16,7 @@ def get_genre(id):
 
 res = list()
 for i in range(1, 7, 1):
-    url = 'https://api.themoviedb.org/3/movie/top_rated?api_key={}&language=en-US&page={}'.format(os.environ.get('TMDB_API_KEY'), i)
+    url = 'https://api.themoviedb.org/3/movie/popular?api_key={}&language=en-US&page={}'.format(os.environ.get('TMDB_API_KEY'), i)
     headers = {'Content-Type': 'application/json', 'Accept': 'application/json'}
     r = requests.get(url=url, headers=headers)
 
@@ -32,7 +33,10 @@ for i in range(1, 7, 1):
         else:
             x['name'] = d['name']
 
-        x['date'] = d['release_date']
+        if 'release_date' in d and d['release_date'] != "":
+            x['date'] = d['release_date']
+        else:
+            x['date'] = "TBA"
         
         if d['overview'] != "":
             x['description'] = d['overview'].replace("\r", " ")
