@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import pickle
 import os
 from dotenv import load_dotenv
+import pandas as pd
 
 load_dotenv()
 
@@ -11,12 +12,19 @@ def load_pkl(name):
     with open(name, 'rb') as f:
         return pickle.load(f)
 
+def get_col(id, col):
+    movies = pd.read_csv('data/data.csv', usecols = ['id', 'name', 'genre', 'description'])
+    return movies.loc[movies['id'] == id][col].tolist()[0]
+
 def recommender(model, id, num = 5):
     python_list = list()
     recs = model[id][:num]
     for rec in recs:
         row = {}
         row['_id'] = str(rec[1])
+        row['name'] = get_col(rec[1], 'name')
+        row['genre'] = get_col(rec[1], 'genre')
+        row['description'] = get_col(rec[1], 'description')
         row['score'] = str(rec[0])
         row['link'] = '{}/movie/{}'.format(os.environ.get('MOVIE_DB_URL'), rec[1])
         row['recommendations'] = '{}/movie?id={}&num={}'.format(os.environ.get('MOVIE_RECSYS_URL'), rec[1], num)
