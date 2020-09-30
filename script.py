@@ -24,7 +24,7 @@ for i in range(1, 7, 1):
     for d in response['results']:
         x = {}
         x['id'] = d['id']
-        
+
         if 'title' in d:
             x['name'] = d['title']
         elif 'original_title' in d:
@@ -38,12 +38,15 @@ for i in range(1, 7, 1):
             x['description'] = d['overview'].replace("\r", " ")
         else:
             x['description'] = "null"
-        
+
         genre = []
         for i in d['genre_ids']:
             g = get_genre(i)
             genre.append(g)
         x['genre'] = ', '.join(genre)
+
+        x['backdrop'] = d['backdrop_path']
+        x['poster'] = d['poster_path']
 
         res.append(x)
 
@@ -55,7 +58,7 @@ with open('data/data.json') as f:
     data = json.loads(f.read())
     f = csv.writer(open('data/data.csv', 'w', newline='', encoding='utf-8'))
 
-f.writerow(['id', 'name', 'date', 'genre', 'description'])
+f.writerow(['id', 'name', 'date', 'genre', 'description', 'backdrop', 'poster'])
 
 for x in data:
-    f.writerow([x['id'], x['name'], x['date'], x['genre'], x['description']])
+    f.writerow([x['id'], x['name'], x['date'], x['genre'], x['description'], x['backdrop'], x['poster']])

@@ -13,7 +13,7 @@ def load_pkl(name):
         return pickle.load(f)
 
 def get_col(id, col):
-    movies = pd.read_csv('data/data.csv', usecols = ['id', 'name', 'genre', 'description'])
+    movies = pd.read_csv('data/data.csv', usecols = ['id', 'name', 'date', 'genre', 'description', 'backdrop', 'poster'])
     return movies.loc[movies['id'] == id][col].tolist()[0]
 
 def recommender(model, id, num = 5):
@@ -24,6 +24,9 @@ def recommender(model, id, num = 5):
         row['_id'] = str(rec[1])
         row['name'] = get_col(rec[1], 'name')
         row['genre'] = get_col(rec[1], 'genre')
+        row['date'] = get_col(rec[1], 'date')
+        row['backdrop'] = '{}/{}'.format(os.environ.get('TMDB_BACKDROP_URL'), get_col(rec[1], 'backdrop'))
+        row['poster'] = '{}/{}'.format(os.environ.get('TMDB_POST_URL'), get_col(rec[1], 'poster'))
         row['description'] = get_col(rec[1], 'description')
         row['score'] = str(rec[0])
         row['link'] = '{}/movie/{}'.format(os.environ.get('MOVIE_DB_URL'), rec[1])
