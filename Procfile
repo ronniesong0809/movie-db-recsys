@@ -1,1 +1,1 @@
-web: gunicorn --bind 0.0.0.0:$PORT --log-file=- app:app
+web: gunicorn -w 3 --bind 0.0.0.0:$PORT --error-logfile=- --access-logfile=- app:app

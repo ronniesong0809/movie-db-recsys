@@ -1,6 +1,9 @@
 from flask import Flask, request, jsonify
 import pickle
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -15,7 +18,7 @@ def recommender(model, id, num = 5):
         row = {}
         row['_id'] = str(rec[1])
         row['score'] = str(rec[0])
-        row['link'] = '{}/movie/{}'.format(os.environ.get('MOVIEDB_URL'), rec[1])
+        row['link'] = '{}/movie/{}'.format(os.environ.get('MOVIE_DB_URL'), rec[1])
         row['recommendations'] = '{}/movie?id={}&num={}'.format(os.environ.get('MOVIE_RECSYS_URL'), rec[1], num)
         python_list.append(row)
     return python_list
@@ -26,7 +29,7 @@ def home():
             <a href='/movie?id=120&num=10'> example 2 </a> </br>"
 
 @app.route("/movie", methods=['GET'])
-def getMovie():
+def get_movie():
     id = request.args.get('id')
     num = request.args.get('num')
 
