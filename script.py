@@ -15,7 +15,7 @@ def get_genre(id):
             return i['name']
 
 res = list()
-for i in range(1, 7, 1):
+for i in range(1, 101, 1):
     url = 'https://api.themoviedb.org/3/movie/popular?api_key={}&language=en-US&page={}'.format(os.environ.get('TMDB_API_KEY'), i)
     headers = {'Content-Type': 'application/json', 'Accept': 'application/json'}
     r = requests.get(url=url, headers=headers)
