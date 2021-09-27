@@ -4,10 +4,10 @@ from sklearn.metrics.pairwise import linear_kernel
 import pickle
 
 # load csv
-movies = pd.read_csv('data/data.csv', usecols = ['id', 'name', 'description'])
+movies = pd.read_csv('data/data.csv', usecols = ['id', 'name', 'genre', 'description'])
 
 # combine name and description
-movies['content'] = movies[['name', 'description']].astype(str).apply(lambda x: ' // '.join(x), axis = 1)
+movies['content'] = movies[['name', 'genre', 'description']].astype(str).apply(lambda x: ' // '.join(x), axis = 1)
 movies['content'].fillna('Null', inplace = True)
 
 # tf–idf
